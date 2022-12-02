@@ -6,7 +6,9 @@ public class ApiKeyRequest
     public String ApiToken;
     public String Phone;
     public String Email;
-    
+    public String OrderNumber;
+    public String CartTotal;
+
     public String getCode() {
         return Code;
     }
@@ -37,5 +39,21 @@ public class ApiKeyRequest
 
     public void setEmail(String email) {
         Email = email;
+    }
+
+    public String getOrderNumber() {
+        return OrderNumber;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        OrderNumber = orderNumber;
+    }
+
+    public String getCartTotal() {
+        return CartTotal;
+    }
+
+    public void setCartTotal(String cartTotal) {
+        CartTotal = cartTotal;
     }
 }

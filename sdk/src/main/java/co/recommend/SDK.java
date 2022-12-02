@@ -80,9 +80,11 @@ public class SDK {
      * @param   code    Recommend referral code from URL
      * @param   email   Optional buyer email
      * @param   phone   Optional buyer phone
+     * @param   orderNumber Optional order number
+     * @param   cartTotal   Optional cart total
      * @return True if referral code is correct and conversion was recored on API, otherwise false
      */
-    public Boolean ReferralCheck(String code, String email, String phone) throws Exception {
+    public Boolean ReferralCheck(String code, String email, String phone, String orderNumber, String cartTotal) throws Exception {
         if (code.isEmpty()) {
             throw new IllegalArgumentException("Referral code cannot be empty");
         }
@@ -98,7 +100,15 @@ public class SDK {
             }
 
             if (!phone.isEmpty()) {
-                req.setEmail(phone);
+                req.setPhone(phone);
+            }
+
+            if (!orderNumber.isEmpty()) {
+                req.setOrderNumber(orderNumber);
+            }
+
+            if (!cartTotal.isEmpty()) {
+                req.setOrderNumber(cartTotal);
             }
 
             String json = objectMapper.writeValueAsString(req);
