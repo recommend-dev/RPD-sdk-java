@@ -8,6 +8,9 @@ public class App {
 
             System.out.println(sdk.ReferralCheck("valid-referral-code", "", "", "", ""));
 
+            System.out.println(sdk.ApproveConversion(1));
+            System.out.println(sdk.ApproveConversion(1));
+
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

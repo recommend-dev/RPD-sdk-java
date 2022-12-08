@@ -21,3 +21,11 @@ First, you need to obtain your API key [here](https://www.recommend.co/partners/
     sdk.ReferralCheck("referralCode", "", "", "", "");
 
 Parameters for conversion are referral code, email (optional), phone number (optional), order number (optional) and cart total (optional).
+
+### Conversions can be approved using API from your application using following call:
+
+    sdk.ApproveConversion(conversionIdYouReceivedInReferralCheckResponse);
+
+### Or you can reject conversion:
+
+    sdk.RejectConversion(conversionIdYouReceivedInReferralCheckResponse)

@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class SDK {
     private String APIKEY = "";
-    private String APIURL = "https://api.recommend.co/apikeys";
+    private String APIBASEURL = "https://api.recommend.co/apikeys";
 
     /*
      * Initialize SDK with your API key and optional custom url (used for testing)
@@ -28,7 +28,7 @@ public class SDK {
         APIKEY = apiKey;
 
         if (!customUrl.isEmpty()) {
-            APIURL = customUrl;
+            APIBASEURL = customUrl;
             System.out.println("Using custom URL: " + customUrl);
         }
     }
@@ -47,7 +47,7 @@ public class SDK {
             String json = objectMapper.writeValueAsString(req);
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(APIURL))
+                    .uri(URI.create(APIBASEURL))
                     .header("cache-control", "no-cache")
                     .header("content-type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(json))
@@ -82,9 +82,9 @@ public class SDK {
      * @param   phone   Optional buyer phone
      * @param   orderNumber Optional order number
      * @param   cartTotal   Optional cart total
-     * @return True if referral code is correct and conversion was recored on API, otherwise false
+     * @return API response object containing status code and conversion ID or null if error
      */
-    public Boolean ReferralCheck(String code, String email, String phone, String orderNumber, String cartTotal) throws Exception {
+    public ApiKeyResponse ReferralCheck(String code, String email, String phone, String orderNumber, String cartTotal) throws Exception {
         if (code.isEmpty()) {
             throw new IllegalArgumentException("Referral code cannot be empty");
         }
@@ -114,7 +114,7 @@ public class SDK {
             String json = objectMapper.writeValueAsString(req);
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(APIURL))
+                    .uri(URI.create(APIBASEURL))
                     .header("cache-control", "no-cache")
                     .header("content-type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(json))
@@ -126,19 +126,107 @@ public class SDK {
                     .send(request, BodyHandlers.ofString());
 
             if (response == null || response.statusCode() != 200)
-                return false;
+            {
+                return null;
+            }
 
             ApiKeyResponse resp = objectMapper.readValue(response.body(), ApiKeyResponse.class);
-            
-            if (resp != null && resp.getStatus() == 200) {
-                return true;
-            } else {
-                return false;
-            }
+
+            return resp;
         } catch (Exception ex) {
             System.out.println("Error checking referral");
             ex.printStackTrace();
-            return false;
+            return null;
+        }
+    }
+
+    /*
+     * Approve conversion on API
+     * @param   conversionId    ID of conversion to approve
+     * @returns Returns API response obj with status code, message containing new conversion status or null if error
+     */
+    public ApiKeyResponse ApproveConversion(Integer conversionId) throws Exception
+    {
+        try
+        {
+            ObjectMapper objectMapper = new ObjectMapper();
+            ConversionDTO dto = new ConversionDTO();
+            dto.setApiKey(APIKEY);
+            dto.setConversionId(conversionId);
+
+            String json = objectMapper.writeValueAsString(dto);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(APIBASEURL + "/approve"))
+                    .header("cache-control", "no-cache")
+                    .header("content-type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+
+            HttpResponse<String> response = HttpClient
+                    .newBuilder()
+                    .build()
+                    .send(request, BodyHandlers.ofString());
+
+            if (response == null || response.statusCode() != 200)
+            {
+                return null;
+            }
+
+            ApiKeyResponse resp = objectMapper.readValue(response.body(), ApiKeyResponse.class);
+
+            return resp;
+        }
+        catch (Exception ex)
+        {
+            System.out.println("Error approving conversion");
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    /*
+     * Reject conversion on API
+     * @param   conversionId    ID of conversion to reject
+     * @returns Returns API response obj with status code, message containing new conversion status or null if error
+     */
+    public ApiKeyResponse RejectConversion(Integer conversionId) throws Exception
+    {
+        try
+        {
+            ObjectMapper objectMapper = new ObjectMapper();
+            ConversionDTO dto = new ConversionDTO();
+            dto.setApiKey(APIKEY);
+            dto.setConversionId(conversionId);
+
+            String json = objectMapper.writeValueAsString(dto);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(APIBASEURL + "/reject"))
+                    .header("cache-control", "no-cache")
+                    .header("content-type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+
+            HttpResponse<String> response = HttpClient
+                    .newBuilder()
+                    .build()
+                    .send(request, BodyHandlers.ofString());
+
+            if (response == null || response.statusCode() != 200)
+            {
+                return null;
+            }
+
+            ApiKeyResponse resp = objectMapper.readValue(response.body(), ApiKeyResponse.class);
+
+            return resp;
+        }
+        catch (Exception ex)
+        {
+            System.out.println("Error approving conversion");
+            ex.printStackTrace();
+            return null;
         }
     }
 }
