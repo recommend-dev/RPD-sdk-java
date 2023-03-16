@@ -8,6 +8,15 @@ public class ApiKeyRequest
     public String Email;
     public String OrderNumber;
     public String CartTotal;
+    public String SSNID;
+
+    public String getSSNID() {
+        return SSNID;
+    }
+
+    public void setSSNID(String sSNID) {
+        SSNID = sSNID;
+    }
 
     public String getCode() {
         return Code;

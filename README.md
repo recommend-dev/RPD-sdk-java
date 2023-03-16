@@ -12,15 +12,15 @@ First, you need to obtain your API key [here](https://www.recommend.co/partners/
 
     SDK sdk = new SDK("your-api-key", "");
 
-### You can test connection to our platform like this:
+### You can test connection to our platform like this (you don't need to do this before each request, you can do it only once, for example on app startup):
 
     boolean result = sdk.TestConnection();
 
 ### To send us referral information, when conversion occurs, send it like this:
 
-    sdk.ReferralCheck("referralCode", "", "", "", "");
+    sdk.ReferralCheck("referralCode", "", "", "", "", "");
 
-Parameters for conversion are referral code, email (optional), phone number (optional), order number (optional) and cart total (optional).
+Parameters for conversion are referral code, email (optional), phone number (optional), order number (optional)  cart total (optional) and session id (from query string received with referral code - optional).
 
 ### Conversions can be approved using API from your application using following call:
 

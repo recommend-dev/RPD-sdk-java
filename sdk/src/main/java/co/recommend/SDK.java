@@ -82,9 +82,10 @@ public class SDK {
      * @param   phone   Optional buyer phone
      * @param   orderNumber Optional order number
      * @param   cartTotal   Optional cart total
+     * @param   ssnId   Optional session id (from URL)
      * @return API response object containing status code and conversion ID or null if error
      */
-    public ApiKeyResponse ReferralCheck(String code, String email, String phone, String orderNumber, String cartTotal) throws Exception {
+    public ApiKeyResponse ReferralCheck(String code, String email, String phone, String orderNumber, String cartTotal, String ssnId) throws Exception {
         if (code.isEmpty()) {
             throw new IllegalArgumentException("Referral code cannot be empty");
         }
@@ -109,6 +110,10 @@ public class SDK {
 
             if (!cartTotal.isEmpty()) {
                 req.setOrderNumber(cartTotal);
+            }
+
+            if (!ssnId.isEmpty()){
+                req.setSSNID(ssnId);
             }
 
             String json = objectMapper.writeValueAsString(req);

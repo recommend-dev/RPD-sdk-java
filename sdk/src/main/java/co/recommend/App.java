@@ -6,7 +6,7 @@ public class App {
             SDK sdk = new SDK("your-api-key", "");
             System.out.println(sdk.TestConnection());
 
-            System.out.println(sdk.ReferralCheck("valid-referral-code", "", "", "", ""));
+            System.out.println(sdk.ReferralCheck("valid-referral-code", "", "", "", "", ""));
 
             System.out.println(sdk.ApproveConversion(1));
             System.out.println(sdk.ApproveConversion(1));
